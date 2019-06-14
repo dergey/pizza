@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Spring Boot Thymeleaf Hello World Example</title>
+    <link rel="stylesheet" th:href="@{webjars/bootstrap/4.2.1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js" type="text/javascript"></script>
+    <script th:src="@{webjars/bootstrap/4.2.1/js/bootstrap.min.js}" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#button-save').click(function (e) {
+                //Prevent default submission of form
+                e.preventDefault();
+
+                //Remove all errors
+                $('input').next().remove();
+
+                $.post('ingredients', $('form[name=ingredientForm]').serialize(), function (ingredient) {
+                    $('#ingredient-table tr:last').after(function () {
+                        return '<tr><td>' + ingredient.id + '</td><td>' + ingredient.title + '</td><td>' + ingredient.shelf_life + ' ч.</td></tr>';
+                    });
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Pizza workstation</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="/">Главная</a>
+            <li class="nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" href="#" id="ingredient-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Ингредиенты
+                </a>
+                <div class="dropdown-menu" aria-labelledby="ingredient-dropdown">
+                    <a class="dropdown-item disabled" href="/">Список ингредиентов</a>
+                    <a class="dropdown-item" href="#">Склад</a>
+                    <a class="dropdown-item" href="#">Поставщики</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="pizza-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Пиццы
+                </a>
+                <div class="dropdown-menu" aria-labelledby="pizza-dropdown">
+                    <a class="dropdown-item" href="#">Список пицц</a>
+                    <a class="dropdown-item" href="#">Рецепты</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </li>
+            <a class="nav-item nav-link" href="customers">Клиенты</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container" role="main">
+
+    <div class="container-fluid mt-3">
+        <table class="table" id="ingredient-table">
+            <thead>
+            <tr>
+                <th scope="col">Номер</th>
+                <th scope="col">Название</th>
+                <th scope="col">Срок годности</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="ingredients : ${content}">
+                <tr>
+                    <td style="width:20%" th:text="${ingredients.id}"></td>
+                    <td style="width:30%" th:text="${ingredients.title}"></td>
+                    <td style="width:30%" th:text="${ingredients.shelfLife} + ' ч.'"></td>
+                    <td style="width:20%">
+                        <div class="d-inline text-nowrap">
+                            <button type="button" class="btn btn-primary" data-target="#addModal" data-toggle="modal">Изменить</button>
+                            <button type="button" class="btn btn-danger" data-target="#deleteModal" data-toggle="modal">Удалить</button>
+                        </div>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <button class="btn btn-primary" data-target="#addModal" data-toggle="modal" type="button">Создать</button>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-3 d-flex justify-content-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li th:class="'page-item ' + ${is_first ? 'disabled' : ''}">
+                    <a aria-label="Previous" class="page-link" href="#">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+
+                <li class="page-item" th:if="${!is_first}"><a class="page-link" href="#" th:text="${page}"></a></li>
+                <li class="page-item active"><a class="page-link" href="#" th:text="${page + 1}"></a></li>
+                <li class="page-item" th:if="${!is_last}"><a class="page-link" href="#" th:text="${page + 2}"></a></li>
+                <li th:class="'page-item ' + ${is_last ? 'disabled' : ''}">
+                    <a aria-label="Next" class="page-link" href="#">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Create dialog -->
+    <div aria-hidden="true" aria-labelledby="addModalTitle" class="modal fade" id="addModal" role="dialog"
+         tabindex="-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalTitle">Создать ингредиент</h5>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form name="ingredientForm">
+                        <div class="form-group">
+                            <label class="col-form-label" for="ingredient-title">Название:</label>
+                            <input class="form-control" id="ingredient-title" name="title" type="text">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label" for="ingredient-shelf-life">Срок годности:</label>
+                            <input class="form-control" id="ingredient-shelf-life" name="shelfLife" type="text">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-dismiss="modal" type="button">Отменить</button>
+                    <button class="btn btn-success" id="button-save" type="button">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete dialog -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Подтвердите действие</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Вы действительно хотите удалить ингридиент?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
