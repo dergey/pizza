@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import {Button, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
+import { withRouter } from 'react-router-dom';
+import {Button, Container, Form, FormGroup, Input, Table} from 'reactstrap';
 import AppNavbar from '../AppNavbar';
-import {authHeader, getAuthorization} from "../helpers/auth-header";
+import { getAuthorization } from "../helpers/auth-header";
 
 class SqlEdit extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
+      isLoading: false,
       user: {},
       table: '',
       error: '',
@@ -28,7 +28,6 @@ class SqlEdit extends Component {
 
   async handleSubmit(event) {
     event.preventDefault();
-    const {item} = this.state;
 
     this.setState({isLoading: true});
 
@@ -92,6 +91,7 @@ class SqlEdit extends Component {
                 {errorAlert}
               </Container>
             </Form>
+            { isLoading ? <div className="alert alert-info">Загрзука...</div> : ''}
             <Table className="mt-4">
               <thead>
               <tr>
