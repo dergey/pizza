@@ -2,14 +2,9 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import AppNavbar from '../AppNavbar';
-import { instanceOf } from 'prop-types';
-import { Cookies, withCookies } from 'react-cookie';
 import {authHeader} from "../helpers/auth-header";
 
 class IngredientEdit extends Component {
-  static propTypes = {
-    cookies: instanceOf(Cookies).isRequired
-  };
 
   emptyItem = {
     title: '',
@@ -18,7 +13,6 @@ class IngredientEdit extends Component {
 
   constructor(props) {
     super(props);
-    const {cookies} = props;
     this.state = {
       item: this.emptyItem
     };
@@ -91,4 +85,4 @@ class IngredientEdit extends Component {
   }
 }
 
-export default withCookies(withRouter(IngredientEdit));
+export default withRouter(IngredientEdit);

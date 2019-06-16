@@ -14,10 +14,6 @@ class Home extends Component {
         sql: ''
     };
 
-    constructor(props) {
-        super(props);
-    }
-
     async componentDidMount() {
         this.setState({
             user: JSON.parse(localStorage.getItem('user')),

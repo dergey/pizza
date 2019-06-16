@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button, ButtonGroup, Container, Input, Label, Pagination, Table} from 'reactstrap';
+import {Button, ButtonGroup, Container, Input, Table} from 'reactstrap';
 import AppNavbar from '../AppNavbar';
 import { Link, withRouter } from 'react-router-dom';
 import {authHeader, getAuthorization} from "../helpers/auth-header";

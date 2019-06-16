@@ -1,11 +1,8 @@
 import {Pagination, PaginationItem, PaginationLink} from "reactstrap";
 import React, {Component} from "react";
+import { PropTypes } from 'prop-types';
 
-export default class  PageBar extends Component {
-
-    constructor(props) {
-        super(props);
-    }
+export default class PageBar extends Component {
 
     render() {
         return (<div className="pagination-wrapper">
@@ -25,6 +22,12 @@ export default class  PageBar extends Component {
                 </PaginationItem>
             </Pagination>
         </div>)
-}
+    }
 
 }
+
+PageBar.propTypes = {
+    totalPages: PropTypes.number,
+    currentPage: PropTypes.number,
+    onPageChange: PropTypes.func
+};

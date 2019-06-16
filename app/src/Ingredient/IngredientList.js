@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button, ButtonGroup, Container, Pagination, PaginationLink, PaginationItem, Table} from 'reactstrap';
+import {Button, ButtonGroup, Container, Table} from 'reactstrap';
 import AppNavbar from '../AppNavbar';
 import PageBar from '../PageBar';
 import { Link, withRouter } from 'react-router-dom';
